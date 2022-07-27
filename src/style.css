@@ -1,0 +1,21 @@
+.column {
+   float: left;
+   width: 50%;
+ }
+ 
+ /* Clear floats after the columns */
+ .row:after {
+   content: "";
+   display: table;
+   clear: both;
+ }
+
+button{
+   padding: 1%;
+   margin: 1%;
+}
+
+.chk{
+   margin: 1%,0,0,1%;
+   padding-left: 17%;
+}
