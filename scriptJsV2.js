@@ -180,6 +180,7 @@ function calcOneElem(jFile,elem){
     let temp = [];
     let results = [];
     for(let i = 0 ; i < jFile.length; i++){
+        console.log(elem);
         temp.push(jFile[i][elem]);
         }
     let std = math.std(temp);
