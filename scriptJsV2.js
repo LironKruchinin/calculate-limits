@@ -1,3 +1,38 @@
+const exportData = document.querySelector("#exportData");
+exportData.addEventListener('click', (event) => {
+    let isChangeLim = document.querySelector('#changeLim');
+    let exportData = document.querySelector('#exportData');
+    let output = [];
+    let timeMax = document.getElementById('maxF').value;
+    let timeMin = document.getElementById('minF').value;
+    let removeStart0TimeMin = parseInt(timeMin, 10);
+    let removeStart0TimeMax = parseInt(timeMax, 10);
+
+    if((removeStart0TimeMin == 0) || (removeStart0TimeMin == NaN)){
+        removeStart0TimeMin = 0;
+    }
+    if((removeStart0TimeMax == 0) || (removeStart0TimeMin == NaN)){
+        removeStart0TimeMax = 0;
+    }
+    
+    let textField = document.querySelectorAll('input[name="text"]');
+    
+    
+    let checkboxes = document.querySelectorAll('input[name="elem"]:checked');
+    checkboxes.forEach((checkbox) => {
+        output.push([checkbox.value, checkbox.value] );
+    });
+    let outPutObj = Object.fromEntries(output);
+    // console.log(outPutObj);
+    // console.log(removeStart0TimeMin);
+    // console.log(removeStart0TimeMax);
+    // console.log(isChangeLim.checked); // false
+    return outPutObj, removeStart0TimeMin, removeStart0TimeMax, isChangeLim.checked
+});   
+
+
+
+
 // import xlsx from 'xlsx';
 const xlsx = require('xlsx');
 // import * as fs from 'fs';
@@ -33,21 +68,18 @@ let mainData = xlsx.utils.sheet_to_json(ws, {raw:false});
 
 fs.writeFileSync("./jsonDataOriginal.json", JSON.stringify(mainData, null, 2) );
 
-
 /* Global variables to use */
-let timeMin = document.getElementById('minF');
-let timeMax = document.getElementById('maxF');
+
 let repairStrHeb = 'שיפוץ';
 let engString = 'engine_num';
 const limKeyWord = "Lim";
-let isChangeLim = true;
+isChangeLim = true;
 let repeatStr = 'דגימה חוזרת';
 let engRemStr = 'הסרת מנוע';
 let copyLim = [];
 let dataUnderLim = [];
 let dataOverLim = [];
 // exports.engSn = engSn;
-
 
 
 /* Array for elements that can be edited easily */
@@ -343,7 +375,6 @@ fs.writeFileSync('./jsonDataOriginal.json', JSON.stringify(mainData, null, 2)); 
 fs.writeFileSync('./jsonFiltered.json', JSON.stringify(remRepeatedTests(mainData, repeatStr), null, 2)); //writes json file
 
 let jsonFiltered = require('../jsonFiltered.json');
-// let jsonFiltered = require('./jsonFiltered.json');
 
 
 fs.writeFileSync('./jsonDataOriginal.json', JSON.stringify(mainData, null, 2)); //writes json file
@@ -355,15 +386,10 @@ timeRepairFix(jsonFiltered);
 jsonFiltered = jsonFiltered.flat();
 
 
-fs.writeFileSync(`./jsonFilteredHours.json`, JSON.stringify(timeCheckButton(jsonFiltered, timeMin.value, timeMax.value), null, 2)); //writes json file
+fs.writeFileSync(`./jsonFilteredHours.json`, JSON.stringify(timeCheckButton(jsonFiltered, removeStart0TimeMin, removeStart0TimeMax), null, 2)); //writes json file
 
 
 fs.writeFileSync('./jsonFiltered.json', JSON.stringify(jsonFiltered, null, 2)); //writes json file
-
-// fs.writeFileSync('./jsonFilteredTest.json', JSON.stringify(filterEng(mainData), null, 2)); //writes json file
-
-// writeDifferentLims(mainData, isChangeLim, elements, results);
-// writeDifferentLims(mainData, isChangeLim, elements, results);
 
 writeDifferentLims(jsonFiltered, isChangeLim, elements, calcAllElem(jsonFiltered,elements));
 countLim(jsonFiltered, copyLim, elements);
@@ -380,7 +406,7 @@ countLim(engUnderLim, copyLim, elements);
 
 
 
-fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMin.value, timeMax.value), null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, removeStart0TimeMin, removeStart0TimeMax), null, 2)); //writes json file
 fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, 30, 0), null, 2)); //writes json file
 
 let engUnderLimNew = require('../jsonEngUnderLimNew.json');
@@ -391,9 +417,12 @@ let engUnderLimOld = require('../jsonEngUnderLimOld.json');
 writeDifferentLims(engUnderLimOld, isChangeLim, elements, calcAllElem(engUnderLimOld,elements));
 countLim(engUnderLimOld, copyLim, elements);
 
-fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMin.value, timeMax.value), null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, removeStart0TimeMin, removeStart0TimeMax), null, 2)); //writes json file
 fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, 30, 0), null, 2)); //writes json file
 
+btn1.addEventListener('click', testH);
+exportData.addEventListener('click',  console.log(removeStart0TimeMin));
 
-writeExcelFile();
+
+
 // remFilesAfterUse();
