@@ -1,73 +1,3 @@
-const exportData = document.querySelector("#exportData");
-exportData.addEventListener('click', (event) => {
-    let isChangeLim = document.querySelector('#changeLim');
-    let exportData = document.querySelector('#exportData');
-    let output = [];
-    let timeMax = document.getElementById('maxF').value;
-    let timeMin = document.getElementById('minF').value;
-    let removeStart0TimeMin = parseInt(timeMin, 10);
-    let removeStart0TimeMax = parseInt(timeMax, 10);
-
-    if((removeStart0TimeMin == 0) || (removeStart0TimeMin == NaN)){
-        removeStart0TimeMin = 0;
-    }
-    if((removeStart0TimeMax == 0) || (removeStart0TimeMin == NaN)){
-        removeStart0TimeMax = 0;
-    }
-    
-    let textField = document.querySelectorAll('input[name="text"]');
-    
-    
-    let checkboxes = document.querySelectorAll('input[name="elem"]:checked');
-    checkboxes.forEach((checkbox) => {
-        output.push([checkbox.value, checkbox.value] );
-    });
-    let outPutObj = Object.fromEntries(output);
-    // console.log(outPutObj);
-    // console.log(removeStart0TimeMin);
-    // console.log(removeStart0TimeMax);
-    // console.log(isChangeLim.checked); // false
-    return outPutObj, removeStart0TimeMin, removeStart0TimeMax, isChangeLim.checked
-});   
-
-
-
-
-// import xlsx from 'xlsx';
-const xlsx = require('xlsx');
-// import * as fs from 'fs';
-const fs = require('fs');
-// import math from 'mathjs';
-const math = require('mathjs');
-let selectedFile = document.getElementById('input').files[0];
-  
-document.addEventListener('drop', (event) => {
-	event.preventDefault();
-	event.stopPropagation();
-
-	for (const f of event.dataTransfer.files) {
-        selectedFile = f.path;
-        console.log(selectedFile);
-	}
-});
-
-document.addEventListener('dragover', (e) => {
-	e.preventDefault();
-	e.stopPropagation();
-});
-
-
-/* importing excel file */
-
-const wb = xlsx.readFile(`${selectedFile}`, {dateNF: "dd/mm/yyyy"});
-const ws = wb.Sheets["Book1"];
-
-
-/* Reads excel and converts data to json */ 
-let mainData = xlsx.utils.sheet_to_json(ws, {raw:false});
-
-fs.writeFileSync("./jsonDataOriginal.json", JSON.stringify(mainData, null, 2) );
-
 /* Global variables to use */
 
 let repairStrHeb = 'שיפוץ';
@@ -96,6 +26,78 @@ const elements = {
     Mo:"Mo",
     Zn:"Zn"
 }
+// import xlsx from 'xlsx';
+const xlsx = require('xlsx');
+// import * as fs from 'fs';
+const fs = require('fs');
+// import math from 'mathjs';
+const math = require('mathjs');
+
+const exportData = document.querySelector("#exportData");
+exportData.addEventListener('click', event => {
+    let isChangeLim = document.querySelector('#changeLim');
+    let exportData = document.querySelector('#exportData');
+    let output = [];
+    let timeMax = document.getElementById('maxF').value;
+    let timeMin = document.getElementById('minF').value;
+    let removeStart0TimeMin = parseInt(timeMin, 10);
+    let removeStart0TimeMax = parseInt(timeMax, 10);
+    let selectedFile = document.getElementById('input').value;
+    selectedFile= selectedFile.split("\\").pop();
+
+    if((removeStart0TimeMin == 0) || (removeStart0TimeMin == NaN)){
+        removeStart0TimeMin = 0;
+    }
+    if((removeStart0TimeMax == 0) || (removeStart0TimeMin == NaN)){
+        removeStart0TimeMax = 0;
+    }
+    
+    let textField = document.querySelectorAll('input[name="text"]');
+    
+    
+    let checkboxes = document.querySelectorAll('input[name="elem"]:checked');
+    checkboxes.forEach((checkbox) => {
+        output.push([checkbox.value, checkbox.value] );
+    });
+    let outPutObj = Object.fromEntries(output);
+    console.log(selectedFile);
+    console.log(outPutObj);
+    console.log(removeStart0TimeMin);
+    console.log(removeStart0TimeMax);
+    console.log(isChangeLim.checked); // false
+    return outPutObj, removeStart0TimeMin, removeStart0TimeMax, isChangeLim.checked, selectedFile;
+});   
+
+
+document.addEventListener('drop', (event) => {
+	event.preventDefault();
+	event.stopPropagation();
+
+	for (const f of event.dataTransfer.files) {
+        selectedFile = f.path;
+        console.log(selectedFile);
+	}
+});
+
+document.addEventListener('dragover', (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+});
+
+
+/* importing excel file */
+
+const wb = xlsx.readFile(`${selectedFile}`, {dateNF: "dd/mm/yyyy"});
+const ws = wb.Sheets["Book1"];
+
+
+/* Reads excel and converts data to json */ 
+let mainData = xlsx.utils.sheet_to_json(ws, {raw:false});
+
+fs.writeFileSync("./jsonDataOriginal.json", JSON.stringify(mainData, null, 2) );
+
+
+
 
 
 /* Creates an array for default limits */
@@ -422,7 +424,7 @@ fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(eng
 
 btn1.addEventListener('click', testH);
 exportData.addEventListener('click',  console.log(removeStart0TimeMin));
-
+writeExcelFile();
 
 
 // remFilesAfterUse();

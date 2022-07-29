@@ -23,10 +23,10 @@ exportData.addEventListener('click', (event) => {
         output.push([checkbox.value, checkbox.value] );
     });
     let outPutObj = Object.fromEntries(output);
-    console.log(outPutObj);
-    console.log(removeStart0TimeMin);
-    console.log(removeStart0TimeMax);
-    console.log(cb.checked); // false
+    // console.log(outPutObj);
+    // console.log(removeStart0TimeMin);
+    // console.log(removeStart0TimeMax);
+    // console.log(cb.checked); // false
 });   
 
 /*
