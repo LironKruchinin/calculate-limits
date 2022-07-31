@@ -1,6 +1,7 @@
 {
-  "name": "electron-app",
-  "productName": "electron-app",
+  "name": "limit-calculator",
+  "productName": "limit-calculator",
+  "icon": "./src/iaf.ico",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": "src/index.js",

@@ -260,8 +260,10 @@ function timeRepairFix(jFile){
     }
     
 }
-
-
+let dirExcel = './Excel';
+if(!fs.existsSync(dirExcel)) {
+    fs.mkdir("./Excel");
+}
 
 
 
