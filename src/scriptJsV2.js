@@ -24,7 +24,7 @@ exportData.addEventListener('click', event => {
     }
     
     let textField = document.querySelectorAll('input[name="text"]');
-    
+    let now = new Date();
     
     let checkboxes = document.querySelectorAll('input[name="elem"]:checked');
     checkboxes.forEach((checkbox) => {
@@ -260,16 +260,14 @@ function timeRepairFix(jFile){
     }
     
 }
-let dirExcel = './Excel';
-if(!fs.existsSync(dirExcel)) {
-    fs.mkdir("./Excel");
-}
+
 
 
 
 function writeExcelFile(){
     const worksheet = xlsx.utils.json_to_sheet(mainData);
     const wsFiltered = xlsx.utils.json_to_sheet(jsonFiltered);
+    // const wsCustomFilter = xlsx.utils.json_to_sheet(engFilterCustomHour);
     const wsEngineOverLim = xlsx.utils.json_to_sheet(engOverLim);
     const wsEngineUnderLim = xlsx.utils.json_to_sheet(engUnderLim);
     const wsEngineUnderLimNew = xlsx.utils.json_to_sheet(engUnderLimNew);
@@ -279,6 +277,7 @@ function writeExcelFile(){
     
     xlsx.utils.book_append_sheet(workbook, worksheet, "Original data");  //Creates a sheet for original data
     xlsx.utils.book_append_sheet(workbook, wsFiltered, "Filtered data");  //Creates a sheet for original data
+    // xlsx.utils.book_append_sheet(workbook, wsCustomFilter, "Custom hour filter");  //Creates a sheet for original data
     xlsx.utils.book_append_sheet(workbook, wsEngineUnderLim, "Engine batch under Limit");  //Creates a sheet for original data
     xlsx.utils.book_append_sheet(workbook, wsEngineUnderLimNew, "New engine batch Under LIM");  //Creates a sheet for original data
     xlsx.utils.book_append_sheet(workbook, wsEngineUnderLimOld, "Old engine batch Under LIM");  //Creates a sheet for original data
@@ -286,7 +285,8 @@ function writeExcelFile(){
 
     xlsx.write(workbook, {bookType:'xlsx', type:'binary'});
     xlsx.write(workbook, {bookType:'xlsx', type:'buffer'});
-    xlsx.writeFile(workbook, 'Excel Export.xlsx'); // writes the main excel
+    xlsx.writeFile(workbook, now.getDate() +"-" + now.getMonth() + "-" +now.getFullYear() +".xlsx"); // writes the main excel
+    // xlsx.writeFile(workbook, 'Excel Export.xlsx'); // writes the main excel
 }
 
 function remFilesAfterUse(){
@@ -297,6 +297,7 @@ function remFilesAfterUse(){
     fs.unlinkSync('jsonEngUnderLimOld.json');
     fs.unlinkSync('jsonFiltered.json');
     fs.unlinkSync('jsonFilteredHours.json');
+    // fs.unlinkSync('jsonFilterCustomHour.json');
 }
 
 
@@ -400,21 +401,30 @@ fs.writeFileSync('./engineUnderLim.json', JSON.stringify(engUnderLim, null, 2));
 
 
 
-fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMin, timeMax), null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, 0, timeMax), null, 2)); //writes json file
 let engUnderLimNew = require('../../../jsonEngUnderLimNew.json');
 engUnderLimNew = engUnderLimNew.flat();
 writeDifferentLims(engUnderLimNew, isChangeLim, outPutObj, calcAllElem(engUnderLimNew,outPutObj)); //
 countLim(engUnderLimNew, outPutObj);
-fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMin, timeMax), null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, 0, timeMax), null, 2)); //writes json file
+
+
+// fs.writeFileSync(`./jsonFilterCustomHour.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMin, timeMax), null, 2)); //writes json file
+// let engFilterCustomHour = require('../../../jsonFilterCustomHour.json');
+// engFilterCustomHour = engFilterCustomHour.flat();
+// writeDifferentLims(engFilterCustomHour, isChangeLim, outPutObj, calcAllElem(engFilterCustomHour,outPutObj)); //
+// timeCheckButton(engFilterCustomHour, timeMin, timeMax);
+// countLim(engFilterCustomHour, outPutObj);
+// fs.writeFileSync('./engineUnderLim.json', JSON.stringify(engFilterCustomHour, null, 2)); //writes json file
 
 
 
-fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMax, 99999), null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMax, Number.MAX_SAFE_INTEGER), null, 2)); //writes json file
 let engUnderLimOld = require('../../../jsonEngUnderLimOld.json');
 engUnderLimOld = engUnderLimOld.flat();
 writeDifferentLims(engUnderLimOld, isChangeLim, outPutObj, calcAllElem(engUnderLimOld,outPutObj));//
 countLim(engUnderLimOld, outPutObj);
-fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMin, timeMax), null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMax, Number.MAX_SAFE_INTEGER), null, 2)); //writes json file
 
 
 
