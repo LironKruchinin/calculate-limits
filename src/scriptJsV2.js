@@ -1,16 +1,20 @@
-let output = [];
-let timeMin = 0;
-let timeMax = 0;
-let removeStart0TimeMin = 0;
-let selectedFile = '';
 
 const exportData = document.getElementById("exportData");
 exportData.addEventListener('click', event => {
+    let output = [];
+    let timeMin = 0;
+    let timeMax = 0;
+    let newEngH = 0;
+    let removeStart0TimeMin = 0;
+    let selectedFile = '';
     let isChangeLim = document.querySelector('#changeLim').checked;
     let exportData = document.querySelector('#exportData');
     output = [];
+    newEngH = document.getElementById('engineHour').value
     timeMin = document.getElementById('minF').value;
     timeMax = document.getElementById('maxF').value;
+    // newEngH = document.getElementById('engH').value;
+    newEngH = parseInt(newEngH, 10);
     timeMin = parseInt(timeMin, 10);
     timeMax = parseInt(timeMax, 10);
     selectedFile = document.getElementById('input').value;
@@ -21,6 +25,9 @@ exportData.addEventListener('click', event => {
     }
     if((timeMax == 0) || (timeMax == NaN)){
         timeMax = 0;
+    }    
+    if((newEngH == 0) || (newEngH == NaN)){
+        newEngH = 0;
     }
     
     let textField = document.querySelectorAll('input[name="text"]');
@@ -33,6 +40,7 @@ exportData.addEventListener('click', event => {
     let outPutObj = Object.fromEntries(output);
     console.log(selectedFile);
     console.log(outPutObj);
+    console.log(newEngH);
     console.log(timeMin);
     console.log(timeMax);
     console.log(isChangeLim.checked); // false
@@ -84,7 +92,6 @@ const ws = wb.Sheets["Book1"];
 let mainData = xlsx.utils.sheet_to_json(ws, {raw:false});
 
 fs.writeFileSync("./jsonDataOriginal.json", JSON.stringify(mainData, null, 2) );
-
 
 
 
@@ -143,6 +150,7 @@ function filterEng(jFile){
         }
         fs.writeFileSync('./engineUnderLim.json', JSON.stringify(dataUnderLim, null, 2)); //writes json file
         fs.writeFileSync('./engineOverLim.json', JSON.stringify(dataOverLim, null, 2));
+        fs.writeFileSync('./jsonFilterCustomHour.json', JSON.stringify(dataUnderLim, null, 2));
     }
  }
 
@@ -265,19 +273,19 @@ function timeRepairFix(jFile){
 
 
 function writeExcelFile(){
-    const worksheet = xlsx.utils.json_to_sheet(mainData);
-    const wsFiltered = xlsx.utils.json_to_sheet(jsonFiltered);
-    // const wsCustomFilter = xlsx.utils.json_to_sheet(engFilterCustomHour);
-    const wsEngineOverLim = xlsx.utils.json_to_sheet(engOverLim);
-    const wsEngineUnderLim = xlsx.utils.json_to_sheet(engUnderLim);
-    const wsEngineUnderLimNew = xlsx.utils.json_to_sheet(engUnderLimNew);
-    const wsEngineUnderLimOld = xlsx.utils.json_to_sheet(engUnderLimOld);
+    let worksheet = xlsx.utils.json_to_sheet(mainData);
+    let wsFiltered = xlsx.utils.json_to_sheet(jsonFiltered);
+    let wsCustomFilter = xlsx.utils.json_to_sheet(engFilterCustomHour);
+    let wsEngineOverLim = xlsx.utils.json_to_sheet(engOverLim);
+    let wsEngineUnderLim = xlsx.utils.json_to_sheet(engUnderLim);
+    let wsEngineUnderLimNew = xlsx.utils.json_to_sheet(engUnderLimNew);
+    let wsEngineUnderLimOld = xlsx.utils.json_to_sheet(engUnderLimOld);
     
-    const workbook = xlsx.utils.book_new();
+    let workbook = xlsx.utils.book_new();
     
     xlsx.utils.book_append_sheet(workbook, worksheet, "Original data");  //Creates a sheet for original data
     xlsx.utils.book_append_sheet(workbook, wsFiltered, "Filtered data");  //Creates a sheet for original data
-    // xlsx.utils.book_append_sheet(workbook, wsCustomFilter, "Custom hour filter");  //Creates a sheet for original data
+    xlsx.utils.book_append_sheet(workbook, wsCustomFilter, "Custom hour filter");  //Creates a sheet for original data
     xlsx.utils.book_append_sheet(workbook, wsEngineUnderLim, "Engine batch under Limit");  //Creates a sheet for original data
     xlsx.utils.book_append_sheet(workbook, wsEngineUnderLimNew, "New engine batch Under LIM");  //Creates a sheet for original data
     xlsx.utils.book_append_sheet(workbook, wsEngineUnderLimOld, "Old engine batch Under LIM");  //Creates a sheet for original data
@@ -285,7 +293,8 @@ function writeExcelFile(){
 
     xlsx.write(workbook, {bookType:'xlsx', type:'binary'});
     xlsx.write(workbook, {bookType:'xlsx', type:'buffer'});
-    xlsx.writeFile(workbook, now.getDate() +"-" + now.getMonth() + "-" +now.getFullYear() +".xlsx"); // writes the main excel
+    xlsx.writeFile(workbook, `${now.getDate()}-${now.getMonth()}-${now.getFullYear()}.xlsx`); // writes the main excel
+    
     // xlsx.writeFile(workbook, 'Excel Export.xlsx'); // writes the main excel
 }
 
@@ -297,9 +306,8 @@ function remFilesAfterUse(){
     fs.unlinkSync('jsonEngUnderLimOld.json');
     fs.unlinkSync('jsonFiltered.json');
     fs.unlinkSync('jsonFilteredHours.json');
-    // fs.unlinkSync('jsonFilterCustomHour.json');
+    fs.unlinkSync('jsonFilterCustomHour.json');
 }
-
 
 
 
@@ -401,34 +409,44 @@ fs.writeFileSync('./engineUnderLim.json', JSON.stringify(engUnderLim, null, 2));
 
 
 
-fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, 0, timeMax), null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, 0, newEngH), null, 2)); //writes json file
 let engUnderLimNew = require('../../../jsonEngUnderLimNew.json');
 engUnderLimNew = engUnderLimNew.flat();
 writeDifferentLims(engUnderLimNew, isChangeLim, outPutObj, calcAllElem(engUnderLimNew,outPutObj)); //
 countLim(engUnderLimNew, outPutObj);
-fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, 0, timeMax), null, 2)); //writes json file
-
-
-// fs.writeFileSync(`./jsonFilterCustomHour.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMin, timeMax), null, 2)); //writes json file
-// let engFilterCustomHour = require('../../../jsonFilterCustomHour.json');
-// engFilterCustomHour = engFilterCustomHour.flat();
-// writeDifferentLims(engFilterCustomHour, isChangeLim, outPutObj, calcAllElem(engFilterCustomHour,outPutObj)); //
-// timeCheckButton(engFilterCustomHour, timeMin, timeMax);
-// countLim(engFilterCustomHour, outPutObj);
-// fs.writeFileSync('./engineUnderLim.json', JSON.stringify(engFilterCustomHour, null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimNew.json`, JSON.stringify(timeCheckButton(engUnderLim, 0, newEngH), null, 2)); //writes json file
 
 
 
-fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMax, Number.MAX_SAFE_INTEGER), null, 2)); //writes json file
+fs.writeFileSync(`./jsonFilterCustomHour.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMin, timeMax), null, 2)); //writes json file
+let engFilterCustomHour = require('../../../jsonFilterCustomHour.json');
+engFilterCustomHour = engFilterCustomHour.flat();
+writeDifferentLims(engFilterCustomHour, isChangeLim, outPutObj, calcAllElem(engFilterCustomHour,outPutObj)); //
+timeCheckButton(engFilterCustomHour, timeMin, timeMax);
+countLim(engFilterCustomHour, outPutObj);
+fs.writeFileSync('./engineUnderLim.json', JSON.stringify(engFilterCustomHour, null, 2)); //writes json file
+
+
+
+fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, newEngH, Number.MAX_SAFE_INTEGER), null, 2)); //writes json file
 let engUnderLimOld = require('../../../jsonEngUnderLimOld.json');
 engUnderLimOld = engUnderLimOld.flat();
 writeDifferentLims(engUnderLimOld, isChangeLim, outPutObj, calcAllElem(engUnderLimOld,outPutObj));//
 countLim(engUnderLimOld, outPutObj);
-fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, timeMax, Number.MAX_SAFE_INTEGER), null, 2)); //writes json file
+fs.writeFileSync(`./jsonEngUnderLimOld.json`, JSON.stringify(timeCheckButton(engUnderLim, newEngH, Number.MAX_SAFE_INTEGER), null, 2)); //writes json file
 
-
+// if(fs.existsSync('../../../' + now.getDate() +"-" + now.getMonth() + "-" +now.getFullYear() +".xlsx")){
+if(fs.existsSync(`../../../ ${now.getDate()}-${now.getMonth()}-${now.getFullYear()}.xlsx`)){
+    console.log("Exists");
+} else{
+    console.log('Creating new file')
+}
 
 writeExcelFile();
 
 remFilesAfterUse();
+
+timeMin = 0;
+timeMax = 0;
+newEngH = 0;
 }); 
