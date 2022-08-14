@@ -11,12 +11,13 @@
 <body>
    <div class="row"> <br /> <!-- main div -->
       <label id="dark-change"></label>
-      <input type="file" class="btn" id="input" accept=".xlsx, .xlsm" ><br>
+      <p><h2>1. Import file:</h1></p>
+      <span class="mark">*</span><input type="file" class="btn" id="input" accept=".xlsx, .xlsm" ><br>
  
       <!-- Adding Individual Renderer Process JS File -->
       <!-- <script src="script.js"></script> -->
 
-      <p><h2>1. Select elements:</h1></p>
+      <p><h2>2. Select elements:</h1></p>
       <div class="column left dark-change"> <!-- left side div -->
          <input type="checkbox" onclick="toggle(this);" class="chkMain">Check all?<br />
 
@@ -35,24 +36,24 @@
          </div> <!-- checkboxes div -->
 
          <div> <!-- flight h range-->
-            <p><h2>2. Hour range:</h2></p>
-               New engine hour limit: <input type="text" id="engineHour" value="30"  min="1" max="999" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
-               Minimum flight hours: <input type="text" id="minF" value="0"  min="1" max="999" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
-               Maximum flight hours: <input type="text" id="maxF" value="30"  min="1" max="999" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
-         </div> <!-- flight h range-->
+            <p><h2>3. Hour range:</h2></p>
+               New engine hour limit: <input type="text" id="engineHour" value="30"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
+               
+                        </div> <!-- flight h range-->
 
       </div> <!-- left side div -->
 
       <div class="column right"> <!-- right side div -->
          <div>
-            <p><h2>3. Platform</h2></p>
-            <button onclick="" class="btn">(Drop down menu here we choose the platform)</button><br>
+            <p><h2>4. Custom range:</h2></p> 
+            Minimum flight hours: <input type="text" id="minF" value="0"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
+            Maximum flight hours: <input type="text" id="maxF" value="30"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
          </div>
 
          <div>
-            <button onclick="" class="btn">New platform</button><br>
-            <button onclick="" class="btn">Filter data</button><br>
-            <input type="checkbox" id="changeLim">Save limit<br /><br />
+            <p><h2>5. Export data:</h2></p>
+
+            <input type="checkbox" id="changeLim">Save limit
             <button id="exportData" onclick="window.location.reload(true)" >Export Excel</button><br>
 
          </div>

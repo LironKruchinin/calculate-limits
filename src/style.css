@@ -1,5 +1,6 @@
 body {
    font-family: Arial, Helvetica, sans-serif;
+   padding: 0.7em;
  }
 
 label{
@@ -92,9 +93,22 @@ input[type="checkbox"] {
    transform: translate(-0.238em, 0.128em);
 
 }
+
 input[type='checkbox']:checked {
    background-color: rgb(70, 129, 244);
- }
- input[type='checkbox']:checked:after {
+}
+input[type='checkbox']:checked:after {
    color:transparent;
- }
+}
+
+input[type=text] {
+   padding: 0.3em;
+   border: 1px solid black;
+   border-radius: 10%;
+}
+
+.mark{
+   font-size: 1.3em;
+   font-weight: bold;
+   color: red;
+}
