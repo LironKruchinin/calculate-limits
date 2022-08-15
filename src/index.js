@@ -11,7 +11,7 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 700,
+    height: 760,
     icon: __dirname + '/iaf.ico',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

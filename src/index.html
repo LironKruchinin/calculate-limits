@@ -11,13 +11,13 @@
 <body>
    <div class="row"> <br /> <!-- main div -->
       <label id="dark-change"></label>
-      <p><h2>1. Import file:</h1></p>
-      <span class="mark">*</span><input type="file" class="btn" id="input" accept=".xlsx, .xlsm" ><br>
+      <p><h2><span class="mark">*</span>1. Import file:</h2></p>
+      <input type="file" class="btn" id="input" accept=".xlsx, .xlsm" ><br/><br/>
+      Name of the spreadsheet: <input type="text" class="textBox" id="getSheetName">
  
-      <!-- Adding Individual Renderer Process JS File -->
-      <!-- <script src="script.js"></script> -->
 
-      <p><h2>2. Select elements:</h1></p>
+
+      <p><h2>2. Select elements:</h2></p>
       <div class="column left dark-change"> <!-- left side div -->
          <input type="checkbox" onclick="toggle(this);" class="chkMain">Check all?<br />
 
@@ -35,9 +35,11 @@
             <input type="checkbox" name="elem" id="chk"  value="Zn">Zn<br /><br />
          </div> <!-- checkboxes div -->
 
+
+
          <div> <!-- flight h range-->
             <p><h2>3. Hour range:</h2></p>
-               New engine hour limit: <input type="text" id="engineHour" value="30"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
+               New engine hour limit: <input type="text" class="textBox" id="engineHour" value="30"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
                
                         </div> <!-- flight h range-->
 
@@ -46,16 +48,17 @@
       <div class="column right"> <!-- right side div -->
          <div>
             <p><h2>4. Custom range:</h2></p> 
-            Minimum flight hours: <input type="text" id="minF" value="0"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
-            Maximum flight hours: <input type="text" id="maxF" value="30"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
+            Minimum flight hours: <input type="text" class="textBox" id="minF" value="0"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
+            Maximum flight hours: <input type="text" class="textBox" id="maxF" value="30"  minlength="1" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"><br /><br />
          </div>
 
          <div>
-            <p><h2>5. Export data:</h2></p>
+            <p><h2><span class="mark">*</span>5. Export data:</h2></p>
 
             <input type="checkbox" id="changeLim">Save limit
             <button id="exportData" onclick="window.location.reload(true)" >Export Excel</button><br>
-
+            <p>It takes about 2 minutes to export the excel with 5000 lines of data. Please wait while it does all of the calculations</p>
+            <button id="showgraph">Show graphs</button>
          </div>
       </div> <!-- right side div -->
 
@@ -70,10 +73,19 @@
          }
 
       let content = document.getElementsByTagName('body')[0];
+      
+      let text1 = document.getElementsByClassName('textBox')[0];
+      let text2 = document.getElementsByClassName('textBox')[1];
+      let text3 = document.getElementsByClassName('textBox')[2];
+      let text4 = document.getElementsByClassName('textBox')[3];
       let darkMode = document.getElementById('dark-change');
       darkMode.addEventListener('click', function(){
          darkMode.classList.toggle('active');
          content.classList.toggle('night');
+         text1.classList.toggle('night');
+         text2.classList.toggle('night');
+         text3.classList.toggle('night');
+         text4.classList.toggle('night');
       })
    </script>
 

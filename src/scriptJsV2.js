@@ -7,9 +7,11 @@ exportData.addEventListener('click', event => {
     let newEngH = 0;
     let removeStart0TimeMin = 0;
     let selectedFile = '';
+    let spreadSheetName = '';
     let isChangeLim = document.querySelector('#changeLim').checked;
     let exportData = document.querySelector('#exportData');
     output = [];
+    spreadSheetName = document.getElementById('getSheetName').value;
     newEngH = document.getElementById('engineHour').value
     timeMin = document.getElementById('minF').value;
     timeMax = document.getElementById('maxF').value;
@@ -38,6 +40,8 @@ exportData.addEventListener('click', event => {
         output.push([checkbox.value, checkbox.value] );
     });
     let outPutObj = Object.fromEntries(output);
+    
+    console.log(spreadSheetName);
     console.log(selectedFile);
     console.log(outPutObj);
     console.log(newEngH);
@@ -85,7 +89,7 @@ const math = require('mathjs');
 /* importing excel file */
 
 const wb = xlsx.readFile(`${selectedFile}`, {dateNF: "dd/mm/yyyy"});
-const ws = wb.Sheets["all_data"];
+const ws = wb.Sheets[spreadSheetName];
 
 
 /* Reads excel and converts data to json */ 

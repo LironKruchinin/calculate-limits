@@ -30,9 +30,11 @@ label.active:before{
 }
 body.night{
    background: rgb(24, 24, 26);
-   color: rgb(230, 230, 230);
+   color: rgb(211, 211, 211);
 }
-
+.textBox.night{
+   color: rgb(211, 211, 211);
+}
 
 
 .column {
@@ -41,11 +43,11 @@ body.night{
  }
  
  /* Clear floats after the columns */
- .row:after {
+/* .row:after {
    content: "";
-   display: table;
+   display: table-caption;
    clear: both;
- }
+ } */
 
 button, input[type=file]::file-selector-button {
    padding: 2.6%;
@@ -67,7 +69,7 @@ button:active, input[type=file]::file-selector-button:active {
 }
 
 
- .chkAlign{
+.chkAlign{
    margin-top: 1%;
    margin-left: 3%;
 }
@@ -104,11 +106,15 @@ input[type='checkbox']:checked:after {
 input[type=text] {
    padding: 0.3em;
    border: 1px solid black;
-   border-radius: 10%;
+   background-color: transparent;
+   border-radius: 8px;
 }
+
+
 
 .mark{
    font-size: 1.3em;
    font-weight: bold;
    color: red;
 }
+
