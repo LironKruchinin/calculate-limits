@@ -1,17 +1,4 @@
-const holder = document.getElementById('holder');
-holder.ondragover = () => {
-   return false;
-};
-holder.ondragleave = holder.ondragend = () => {
-   return false;
-};
-holder.ondrop = (e) => {
-   e.preventDefault();
-   for (let f of e.dataTransfer.files) {
-      console.log('File(s) you dragged here: ', f.path);
-   }
-   return false;
-};
+
 
 
 const exportData = document.getElementById("exportData");
@@ -34,8 +21,12 @@ exportData.addEventListener('click', event => {
     newEngH = parseInt(newEngH, 10);
     timeMin = parseInt(timeMin, 10);
     timeMax = parseInt(timeMax, 10);
-    selectedFile = document.getElementById('input').value;
-    selectedFile= selectedFile.split("\\").pop();
+    selectedFile = document.getElementById('input').files[0].path;
+    fullPath = selectedFile;
+    fileName = selectedFile.split("\\").pop();
+    selectedFile = selectedFile.split("\\");
+    selectedFile.pop();
+    selectedFile = selectedFile.join('\\');
 
     if((timeMin == 0) || (timeMin == NaN)){
         timeMin = 0;
@@ -58,6 +49,7 @@ exportData.addEventListener('click', event => {
     
     console.log(spreadSheetName);
     console.log(selectedFile);
+    console.log(fileName);
     console.log(outPutObj);
     console.log(newEngH);
     console.log(timeMin);
@@ -103,7 +95,7 @@ const math = require('mathjs');
 
 /* importing excel file */
 
-const wb = xlsx.readFile(`${selectedFile}`, {dateNF: "dd/mm/yyyy"});
+const wb = xlsx.readFile(`${fullPath}`, {dateNF: "dd/mm/yyyy"});
 const ws = wb.Sheets[spreadSheetName];
 
 
@@ -314,7 +306,7 @@ function writeExcelFile(){
 
     xlsx.write(workbook, {bookType:'xlsx', type:'binary'});
     xlsx.write(workbook, {bookType:'xlsx', type:'buffer'});
-    xlsx.writeFile(workbook, `${now.getDate()}-${now.getMonth()}-${now.getFullYear()}.xlsx`); // writes the main excel
+    xlsx.writeFile(workbook, `${selectedFile}/${now.getDate()}-${now.getMonth()}-${now.getFullYear()}.xlsx`); // writes the main excel
     
     // xlsx.writeFile(workbook, 'Excel Export.xlsx'); // writes the main excel
 }
