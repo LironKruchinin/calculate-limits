@@ -6,12 +6,16 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="style.css">
    <script defer src="./scriptJsV2.js"></script>
+   <script defer src="./index.js"></script>
    <title>Airforce Limit calculations</title>
 </head>
 <body>
    <div class="row"> <br /> <!-- main div -->
       <label id="dark-change"></label>
       <p><h2><span class="mark">*</span>1. Import file:</h2></p>
+      <div id="holder">
+         Drag your file here
+      </div>
       <input type="file" class="btn" id="input" accept=".xlsx, .xlsm" ><br/><br/>
       Name of the spreadsheet: <input type="text" class="textBox" id="getSheetName">
  
@@ -87,6 +91,10 @@
          text3.classList.toggle('night');
          text4.classList.toggle('night');
       })
+
+
+
+
    </script>
 
 </body>
