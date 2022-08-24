@@ -60,7 +60,7 @@
             <input type="checkbox" id="changeLim">Save limit
             <button id="exportData" >Export Excel</button><br>
             <p>It takes about 2 minutes to export the excel with 5000 lines of data. Please wait while it does all of the calculations</p>
-            <button id="showgraph">Show graphs</button>
+            <button id="showgraph" onclick="showGraph()">Show graphs</button>
          </div>
       </div> <!-- right side div -->
 
@@ -91,7 +91,17 @@
       })
 
 
-
+      const ipc = window.require('electron').ipcRenderer;
+  
+      // Function that will be called on click 
+      // event of "Go to settings window" button
+      function showGraph(){
+      
+         // Make sure to do ipc.send('some String'), 
+         // where 'some String' must be same with 
+         // the first parameter of ipcMain.on() in app.js 
+         ipc.send('openChildWindow');  
+  }
 
    </script>
 
