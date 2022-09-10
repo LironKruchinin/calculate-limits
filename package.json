@@ -48,6 +48,7 @@
   "dependencies": {
     "canvasjs": "^1.8.3",
     "chart.js": "^3.9.1",
+    "d3": "^7.6.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-winstaller": "^5.0.0",
     "mathjs": "^11.0.0",
